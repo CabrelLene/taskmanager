@@ -1,0 +1,43 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(120deg, #f7f9fc, #e0e7ff);
+    color: #222;
+  }
+  
+  ion-content {
+    --background: transparent;
+  }
+  
+  ion-card {
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+  }
+  
+  ion-card:hover {
+    transform: scale(1.01);
+  }
+  
+  ion-button {
+    border-radius: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  
+  ion-input,
+  ion-textarea {
+    --border-radius: 12px;
+    --background: #ffffff;
+    --padding-start: 12px;
+  }
+  
+  .form-wrapper {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+  
