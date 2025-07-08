@@ -2,29 +2,59 @@
     <ion-card class="task-card animate__animated animate__fadeInUp">
       <ion-card-header>
         <ion-card-title>{{ task.title }}</ion-card-title>
-        <ion-card-subtitle>{{ formatDate(task.date) }}</ion-card-subtitle>
+        <ion-card-subtitle v-if="task.date">
+          {{ new Date(task.date).toLocaleDateString() }}
+        </ion-card-subtitle>
       </ion-card-header>
   
       <ion-card-content>
-        <p>{{ task.description }}</p>
-        <div class="btn-zone">
+        <p class="description">
+          {{ task.description || 'Aucune description' }}
+        </p>
+  
+        <div class="actions">
           <ion-button
-            size="small"
-            fill="outline"
-            color="medium"
-            @click="toggleIsDone"
-            v-if="task.isOwner"
+            fill="clear"
+            color="success"
+            @click="marquerCommeFaite"
           >
-            Terminer
+            <ion-icon :icon="checkmarkOutline" slot="icon-only" />
           </ion-button>
+  
           <ion-button
-            size="small"
-            fill="outline"
-            color="danger"
-            @click="supprimer"
-            v-if="task.isOwner"
+            fill="clear"
+            color="medium"
+            @click="modifier = !modifier"
           >
-            Supprimer
+            <ion-icon :icon="createOutline" slot="icon-only" />
+          </ion-button>
+  
+          <ion-button
+            fill="clear"
+            color="danger"
+            @click="supprimerTache"
+          >
+            <ion-icon :icon="trashOutline" slot="icon-only" />
+          </ion-button>
+        </div>
+  
+        <div v-if="modifier" class="edit-zone">
+          <ion-item lines="none">
+            <ion-input
+              v-model="editedTitle"
+              label="Titre"
+              label-placement="floating"
+            />
+          </ion-item>
+          <ion-item lines="none">
+            <ion-textarea
+              v-model="editedDescription"
+              label="Description"
+              label-placement="floating"
+            />
+          </ion-item>
+          <ion-button expand="block" color="primary" @click="mettreAJour">
+            Enregistrer
           </ion-button>
         </div>
       </ion-card-content>
@@ -39,83 +69,106 @@
     IonCardSubtitle,
     IonCardContent,
     IonButton,
+    IonIcon,
+    IonItem,
+    IonInput,
+    IonTextarea,
     toastController,
   } from '@ionic/vue'
-  import { updateTask, deleteTask } from '@/services/api'
+  
+  import { ref } from 'vue'
+  import {
+    checkmarkOutline,
+    trashOutline,
+    createOutline,
+  } from 'ionicons/icons'
+  import { deleteTask, updateTask } from '@/services/api'
   import { useUserStore } from '@/store/state'
   
-  const props = defineProps<{ task: any }>()
+  const props = defineProps<{
+    task: any
+  }>()
+  
   const emit = defineEmits(['updated', 'deleted'])
+  
   const store = useUserStore()
+  const modifier = ref(false)
+  const editedTitle = ref(props.task.title)
+  const editedDescription = ref(props.task.description)
   
-  const toggleIsDone = async () => {
-    try {
-      await updateTask({
-        userId: store.userId,
-        taskId: props.task.taskId,
-        isDone: true,
-      })
-      const toast = await toastController.create({
-        message: 'Tâche terminée !',
-        duration: 1500,
-        color: 'success',
-      })
-      toast.present()
-      emit('updated')
-    } catch (e) {
-      const toast = await toastController.create({
-        message: 'Erreur lors de la mise à jour.',
-        duration: 2000,
-        color: 'danger',
-      })
-      toast.present()
-    }
+  const supprimerTache = async () => {
+    await deleteTask({
+      userId: store.userId,
+      taskId: props.task.taskId,
+    })
+    emit('deleted')
   }
   
-  const supprimer = async () => {
-    try {
-      await deleteTask({
-        userId: store.userId,
-        taskId: props.task.taskId,
-      })
-      const toast = await toastController.create({
-        message: 'Tâche supprimée.',
-        duration: 1500,
-        color: 'danger',
-      })
-      toast.present()
-      emit('deleted')
-    } catch (e) {
-      const toast = await toastController.create({
-        message: 'Erreur lors de la suppression.',
-        duration: 2000,
-        color: 'danger',
-      })
-      toast.present()
-    }
+  const marquerCommeFaite = async () => {
+    await updateTask({
+      userId: store.userId,
+      taskId: props.task.taskId,
+      isDone: true,
+    })
+    emit('updated')
   }
   
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleString()
+  const mettreAJour = async () => {
+    if (!editedTitle.value.trim()) {
+      const toast = await toastController.create({
+        message: 'Le titre ne peut pas être vide.',
+        duration: 2000,
+        color: 'warning',
+      })
+      toast.present()
+      return
+    }
+  
+    await updateTask({
+      userId: store.userId,
+      taskId: props.task.taskId,
+      title: editedTitle.value,
+      description: editedDescription.value,
+    })
+    modifier.value = false
+    emit('updated')
   }
   </script>
   
   <style scoped>
   .task-card {
-    backdrop-filter: blur(12px);
-    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.72);
     border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    margin-bottom: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s ease;
+    margin-bottom: 20px;
   }
+  
   .task-card:hover {
-    transform: scale(1.01);
+    transform: translateY(-2px);
   }
-  .btn-zone {
+  
+  .actions {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  
+  .description {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-top: 6px;
+    color: #333;
+  }
+  
+  .edit-zone {
+    margin-top: 16px;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 12px;
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
   }
   </style>
   

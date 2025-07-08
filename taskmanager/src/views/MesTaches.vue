@@ -7,15 +7,15 @@
       </ion-header>
   
       <ion-content class="ion-padding animate__animated animate__fadeIn">
-        <ion-button expand="block" @click="toggleForm = !toggleForm" color="success" class="ion-margin-bottom">
+        <ion-button expand="block" @click="toggleForm = !toggleForm" color="success" class="ion-margin-bottom animate__animated animate__fadeInUp">
           {{ toggleForm ? 'Annuler' : 'Nouvelle tâche' }}
         </ion-button>
   
-        <div v-if="toggleForm" class="form-zone">
-          <ion-item>
+        <div v-if="toggleForm" class="form-zone animate__animated animate__fadeInUp">
+          <ion-item lines="none">
             <ion-input v-model="newTitle" label="Titre" label-placement="floating" required />
           </ion-item>
-          <ion-item>
+          <ion-item lines="none">
             <ion-textarea v-model="newDescription" label="Description" label-placement="floating" />
           </ion-item>
           <ion-button expand="block" color="primary" @click="ajouterTache">
@@ -23,7 +23,7 @@
           </ion-button>
         </div>
   
-        <div v-if="mesTaches.length === 0" class="ion-text-center">
+        <div v-if="mesTaches.length === 0" class="ion-text-center ion-padding-top">
           <p>Aucune tâche active</p>
         </div>
   
@@ -51,7 +51,7 @@
     IonItem,
     IonInput,
     IonTextarea,
-    toastController
+    toastController,
   } from '@ionic/vue'
   
   import { onIonViewWillEnter } from '@ionic/vue'
@@ -67,7 +67,6 @@
   const newTitle = ref('')
   const newDescription = ref('')
   
-  // Charger les tâches actives de l'utilisateur
   const chargerTaches = async () => {
     try {
       const res = await getTasksByUserId(store.userId)
@@ -106,10 +105,19 @@
   
   <style scoped>
   .form-zone {
-    background: #f5f5f5;
-    padding: 15px;
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
     margin-bottom: 20px;
+  }
+  
+  ion-input,
+  ion-textarea {
+    --border-radius: 12px;
+    --background: #fff;
+    --padding-start: 12px;
   }
   </style>
   

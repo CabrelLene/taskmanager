@@ -43,9 +43,12 @@
   
   <style scoped>
   .tab-bar-custom {
-    --background: rgba(255, 255, 255, 0.85);
+    --background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.05);
+    padding-bottom: env(safe-area-inset-bottom);
+    border-radius: 16px 16px 0 0;
   }
   
   ion-tab-button {

@@ -7,8 +7,8 @@
       </ion-header>
   
       <ion-content class="ion-padding animate__animated animate__fadeIn">
-        <div class="form-wrapper">
-          <ion-item>
+        <div class="form-wrapper animate__animated animate__fadeInUp">
+          <ion-item lines="none">
             <ion-input
               v-model="firstName"
               label="Prénom"
@@ -17,7 +17,7 @@
             />
           </ion-item>
   
-          <ion-item>
+          <ion-item lines="none">
             <ion-input
               v-model="lastName"
               label="Nom"
@@ -26,7 +26,7 @@
             />
           </ion-item>
   
-          <ion-item>
+          <ion-item lines="none">
             <ion-input
               v-model="email"
               type="email"
@@ -36,7 +36,7 @@
             />
           </ion-item>
   
-          <ion-item>
+          <ion-item lines="none">
             <ion-input
               v-model="password"
               type="password"
@@ -107,11 +107,19 @@
         color: 'success',
       })
       toast.present()
+  
+      // Blurer pour éviter les erreurs aria
+      setTimeout(() => {
+        (document.activeElement as HTMLElement)?.blur()
+      }, 100)
+  
       router.push('/login')
     } catch (error: any) {
-      console.error('Erreur register :', error)
+      console.error('❌ Erreur register :', error)
+  
       const toast = await toastController.create({
-        message: 'Inscription échouée.',
+        message:
+          error?.response?.data || 'Erreur lors de l’inscription.',
         duration: 2500,
         color: 'danger',
       })
@@ -126,9 +134,21 @@
   
   <style scoped>
   .form-wrapper {
-    max-width: 400px;
-    margin: auto;
-    padding-top: 30px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(10px);
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    max-width: 420px;
+    margin: 60px auto;
+    transition: all 0.3s ease;
+  }
+  
+  ion-input {
+    --highlight-color-focused: var(--ion-color-primary);
+    --border-radius: 12px;
+    --box-shadow: none;
+    --background: #ffffff;
   }
   </style>
   
