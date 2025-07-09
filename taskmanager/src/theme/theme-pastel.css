@@ -1,0 +1,11 @@
+.theme-pastel {
+    --ion-background-color: #fdf6f0;
+    --ion-text-color: #4a4a4a;
+    --ion-toolbar-background: #fff2f9;
+    --ion-card-background: #fff8fb;
+    --ion-color-primary: #c9b5f4;
+    --ion-color-success: #b6e2d3;
+    --ion-color-danger: #f5b7b1;
+    --ion-color-medium: #a6a6a6;
+  }
+  

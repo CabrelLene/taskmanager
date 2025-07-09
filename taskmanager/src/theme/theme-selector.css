@@ -1,0 +1,51 @@
+/* Position fab proprement */
+ion-fab {
+    z-index: 9999;
+  }
+  
+  /* Bouton principal (🎨) */
+  ion-fab-button {
+    transition: transform 0.3s ease, background 0.3s ease;
+    border-radius: 50%;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    font-size: 1.4rem;
+  }
+  
+  /* Hover sur fab */
+  ion-fab-button:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+  }
+  
+  /* Boutons enfants (🌙, 🍬, ⚡, 🧑‍💼) */
+  ion-fab-list ion-fab-button {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 1.3rem;
+    backdrop-filter: blur(6px);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Hover effet sur les choix de thème */
+  ion-fab-list ion-fab-button:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Animation d’apparition */
+  ion-fab-list {
+    animation: fadeInFab 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeInFab {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

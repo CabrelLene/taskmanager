@@ -5,10 +5,16 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import { defineConfig } from 'vite'
 
-// https://vitejs.dev/config/
+// ✅ Déclaration de lottie-player comme custom element
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag === 'lottie-player'
+        }
+      }
+    }),
     legacy()
   ],
   resolve: {

@@ -1,0 +1,11 @@
+.theme-neon {
+    --ion-background-color: #000000;
+    --ion-text-color: #39ff14;
+    --ion-toolbar-background: #1a1a1a;
+    --ion-card-background: #111111;
+    --ion-color-primary: #ff00ff;
+    --ion-color-success: #00ffff;
+    --ion-color-danger: #ff0040;
+    --ion-color-medium: #aaaaaa;
+  }
+  

@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router'
 import { useUserStore } from '@/store/state'
+import { pinia } from '@/store/pinia' // ✅ pinia déplacé ici sans boucle
+
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import Tabs from '@/views/Tabs.vue'
@@ -49,10 +51,12 @@ const router = createRouter({
   routes,
 })
 
-// ✅ Navigation Guard pour empêcher l'accès sans login
-router.beforeEach((to, from, next) => {
-  const store = useUserStore()
+// ✅ Restaurer user avant navigation
+const store = useUserStore(pinia)
+store.restoreUserFromStorage()
 
+// ✅ Guard de navigation
+router.beforeEach((to, from, next) => {
   const publicPages = ['/login', '/register']
   const authRequired = !publicPages.includes(to.path)
 

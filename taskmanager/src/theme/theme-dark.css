@@ -1,0 +1,11 @@
+.theme-dark {
+    --ion-background-color: #121212;
+    --ion-text-color: #ffffff;
+    --ion-toolbar-background: #1f1f1f;
+    --ion-card-background: #1e1e1e;
+    --ion-color-primary: #bb86fc;
+    --ion-color-success: #03dac6;
+    --ion-color-danger: #cf6679;
+    --ion-color-medium: #999;
+  }
+  

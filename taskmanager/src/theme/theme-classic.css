@@ -1,0 +1,11 @@
+.theme-classic {
+    --ion-background-color: #ffffff;
+    --ion-text-color: #222222;
+    --ion-toolbar-background: #f0f0f0;
+    --ion-card-background: #ffffff;
+    --ion-color-primary: #3880ff;
+    --ion-color-success: #10dc60;
+    --ion-color-danger: #f04141;
+    --ion-color-medium: #92949c;
+  }
+  

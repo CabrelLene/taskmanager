@@ -1,56 +1,105 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <ion-content class="home-content animate__animated animate__fadeIn">
+      <div class="home-container glass-card">
+        <!-- Animation Lottie -->
+        <lottie-player
+          src="https://assets2.lottiefiles.com/packages/lf20_bhw1ul4g.json"
+          background="transparent"
+          speed="1"
+          style="width: 220px; height: 220px"
+          loop
+          autoplay
+        ></lottie-player>
 
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
+        <h1 class="title">Bienvenue 👋</h1>
+        <p class="subtitle">Votre assistant de productivité personnel</p>
 
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <ion-button
+          expand="block"
+          color="primary"
+          class="action-btn"
+          @click="goToLogin"
+        >
+          🔑 Connexion
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="success"
+          class="action-btn"
+          @click="goToRegister"
+        >
+          📝 Créer un compte
+        </ion-button>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import {
+  IonPage,
+  IonContent,
+  IonButton
+} from '@ionic/vue'
+
+import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  import('@lottiefiles/lottie-player')
+})
+
+const router = useRouter()
+
+const goToLogin = () => {
+  router.push('/login')
+}
+
+const goToRegister = () => {
+  router.push('/register')
+}
 </script>
 
 <style scoped>
-#container {
+.home-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: var(--ion-color-step-50, #f2f2f7);
+}
+
+.home-container {
+  width: 90%;
+  max-width: 400px;
+  padding: 40px 24px;
+  border-radius: 22px;
   text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(12px);
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 10px;
+  color: #333;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 24px;
+  color: #666;
 }
 
-#container a {
-  text-decoration: none;
+.action-btn {
+  margin-top: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  --border-radius: 14px;
+  --box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 </style>

@@ -1,154 +1,191 @@
 <template>
-    <ion-page>
-      <ion-header translucent>
-        <ion-toolbar color="primary">
-          <ion-title>Créer un compte</ion-title>
-        </ion-toolbar>
-      </ion-header>
-  
-      <ion-content class="ion-padding animate__animated animate__fadeIn">
-        <div class="form-wrapper animate__animated animate__fadeInUp">
-          <ion-item lines="none">
-            <ion-input
-              v-model="firstName"
-              label="Prénom"
-              label-placement="floating"
-              required
-            />
-          </ion-item>
-  
-          <ion-item lines="none">
-            <ion-input
-              v-model="lastName"
-              label="Nom"
-              label-placement="floating"
-              required
-            />
-          </ion-item>
-  
-          <ion-item lines="none">
-            <ion-input
-              v-model="email"
-              type="email"
-              label="Email"
-              label-placement="floating"
-              required
-            />
-          </ion-item>
-  
-          <ion-item lines="none">
-            <ion-input
-              v-model="password"
-              type="password"
-              label="Mot de passe"
-              label-placement="floating"
-              required
-            />
-          </ion-item>
-  
-          <ion-button expand="block" @click="register" class="ion-margin-top" color="success">
-            S'inscrire
-          </ion-button>
-  
-          <ion-button fill="clear" @click="goToLogin" class="ion-text-center">
-            Déjà un compte ? Se connecter
-          </ion-button>
-        </div>
-      </ion-content>
-    </ion-page>
-  </template>
-  
-  <script setup lang="ts">
-  import {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonItem,
-    IonInput,
-    IonButton,
-    toastController,
-  } from '@ionic/vue'
-  
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { registerUser } from '@/services/api'
-  
-  const router = useRouter()
-  
-  const firstName = ref('')
-  const lastName = ref('')
-  const email = ref('')
-  const password = ref('')
-  
-  const register = async () => {
-    if (!firstName.value || !lastName.value || !email.value || !password.value) {
-      const toast = await toastController.create({
-        message: 'Veuillez remplir tous les champs.',
-        duration: 2000,
-        color: 'warning',
-      })
-      toast.present()
-      return
-    }
-  
-    try {
-      const response = await registerUser({
-        firstName: firstName.value,
-        lastName: lastName.value,
-        email: email.value,
-        password: password.value,
-      })
-  
-      const toast = await toastController.create({
-        message: 'Inscription réussie ! Veuillez vous connecter.',
-        duration: 2500,
-        color: 'success',
-      })
-      toast.present()
-  
-      // Blurer pour éviter les erreurs aria
-      setTimeout(() => {
-        (document.activeElement as HTMLElement)?.blur()
-      }, 100)
-  
-      router.push('/login')
-    } catch (error: any) {
-      console.error('❌ Erreur register :', error)
-  
-      const toast = await toastController.create({
-        message:
-          error?.response?.data || 'Erreur lors de l’inscription.',
-        duration: 2500,
-        color: 'danger',
-      })
-      toast.present()
-    }
+  <ion-page>
+    <ion-content class="register-content animate__animated animate__fadeIn" :scroll-y="false">
+      <div class="register-container glass-card animate__animated animate__zoomIn">
+        <!-- 🎞 Lottie Animation -->
+        <lottie-player
+          src="https://assets4.lottiefiles.com/packages/lf20_1pxqjqps.json"
+          background="transparent"
+          speed="1"
+          style="width: 180px; height: 180px; margin-bottom: 20px"
+          loop
+          autoplay
+        ></lottie-player>
+
+        <h2 class="title">Créer un compte ✨</h2>
+        <p class="subtitle">Inscris-toi pour commencer à organiser tes tâches</p>
+
+        <ion-item lines="none" class="input">
+          <ion-input
+            v-model="firstName"
+            label="Prénom"
+            label-placement="floating"
+            required
+          />
+        </ion-item>
+
+        <ion-item lines="none" class="input">
+          <ion-input
+            v-model="lastName"
+            label="Nom"
+            label-placement="floating"
+            required
+          />
+        </ion-item>
+
+        <ion-item lines="none" class="input">
+          <ion-input
+            v-model="email"
+            type="email"
+            label="Email"
+            label-placement="floating"
+            required
+          />
+        </ion-item>
+
+        <ion-item lines="none" class="input">
+          <ion-input
+            v-model="password"
+            type="password"
+            label="Mot de passe"
+            label-placement="floating"
+            required
+          />
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          class="register-btn animate__animated animate__pulse animate__infinite"
+          @click="register"
+        >
+          ✅ S'inscrire
+        </ion-button>
+
+        <ion-button fill="clear" @click="goToLogin" class="link">
+          Déjà inscrit ? Se connecter
+        </ion-button>
+      </div>
+    </ion-content>
+  </ion-page>
+</template>
+
+<script setup lang="ts">
+import {
+  IonPage,
+  IonContent,
+  IonItem,
+  IonInput,
+  IonButton,
+  toastController,
+} from '@ionic/vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { registerUser } from '@/services/api'
+
+// ⏯ Lottie as Web Component
+onMounted(() => {
+  import('@lottiefiles/lottie-player')
+})
+
+const router = useRouter()
+
+const firstName = ref('')
+const lastName = ref('')
+const email = ref('')
+const password = ref('')
+
+const register = async () => {
+  if (!firstName.value || !lastName.value || !email.value || !password.value) {
+    const toast = await toastController.create({
+      message: 'Tous les champs sont requis.',
+      duration: 2000,
+      color: 'warning',
+    })
+    toast.present()
+    return
   }
-  
-  const goToLogin = () => {
+
+  try {
+    await registerUser({
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+    })
+
+    const toast = await toastController.create({
+      message: 'Inscription réussie 🎉',
+      duration: 2000,
+      color: 'success',
+    })
+    toast.present()
+
+    document.activeElement instanceof HTMLElement && document.activeElement.blur()
     router.push('/login')
+  } catch (error: any) {
+    const toast = await toastController.create({
+      message: 'Erreur lors de l’inscription 😢',
+      duration: 2000,
+      color: 'danger',
+    })
+    toast.present()
+    console.error('Erreur inscription :', error)
   }
-  </script>
-  
-  <style scoped>
-  .form-wrapper {
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(10px);
-    padding: 24px;
-    border-radius: 18px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-    max-width: 420px;
-    margin: 60px auto;
-    transition: all 0.3s ease;
-  }
-  
-  ion-input {
-    --highlight-color-focused: var(--ion-color-primary);
-    --border-radius: 12px;
-    --box-shadow: none;
-    --background: #ffffff;
-  }
-  </style>
-  
+}
+
+const goToLogin = () => {
+  document.activeElement instanceof HTMLElement && document.activeElement.blur()
+  router.push('/login')
+}
+</script>
+
+<style scoped>
+.register-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--ion-color-step-50, #f3f4f6);
+  padding: env(safe-area-inset);
+}
+
+.register-container {
+  width: 90%;
+  max-width: 400px;
+  padding: 32px 24px;
+  text-align: center;
+  border-radius: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  position: relative;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #777;
+  margin-bottom: 24px;
+}
+
+.input {
+  margin-bottom: 14px;
+  --border-radius: 12px;
+}
+
+.register-btn {
+  margin-top: 16px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.link {
+  margin-top: 12px;
+  font-size: 0.95rem;
+}
+</style>
