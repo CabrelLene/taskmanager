@@ -8,7 +8,6 @@
 
     <ion-content class="ion-padding page-bg animate__animated animate__fadeIn">
       <div v-if="tachesArchivees.length === 0" class="empty-state">
-        <!-- 🎞 Lottie animation si aucune tâche -->
         <lottie-player
           src="https://assets2.lottiefiles.com/packages/lf20_jtbfg2nb.json"
           background="transparent"
@@ -25,7 +24,7 @@
           v-for="task in tachesArchivees"
           :key="task.taskId"
           :task="task"
-          @updated="chargerTaches"
+          @updated="retirerTache(task.taskId)"
           @deleted="chargerTaches"
         />
       </div>
@@ -52,6 +51,7 @@ import TaskCard from '@/components/TaskCard.vue'
 const store = useUserStore()
 const tachesArchivees = ref<any[]>([])
 
+// 🔁 Charger toutes les tâches archivées (isDone = true)
 const chargerTaches = async () => {
   try {
     const res = await getTasksByUserId(store.userId)
@@ -68,11 +68,15 @@ const chargerTaches = async () => {
   }
 }
 
+// ✅ Supprimer une tâche désarchivée de la liste locale
+const retirerTache = (taskId: string) => {
+  tachesArchivees.value = tachesArchivees.value.filter(t => t.taskId !== taskId)
+}
+
 onIonViewWillEnter(() => {
   chargerTaches()
 })
 
-// Charger Lottie
 onMounted(() => {
   import('@lottiefiles/lottie-player')
 })
